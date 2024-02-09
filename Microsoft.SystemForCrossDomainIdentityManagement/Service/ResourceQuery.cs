@@ -42,10 +42,7 @@ namespace Microsoft.SCIM
 
         public ResourceQuery(Uri resource)
         {
-            if (null == resource)
-            {
-                throw new ArgumentNullException(nameof(resource));
-            }
+            ArgumentNullException.ThrowIfNull(resource);
 
             string query = resource.Query;
             if (!string.IsNullOrWhiteSpace(query))
@@ -145,10 +142,7 @@ namespace Microsoft.SCIM
             string value,
             Action<IPaginationParameters, int> action)
         {
-            if (null == action)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
+            ArgumentNullException.ThrowIfNull(action);
 
             if (string.IsNullOrWhiteSpace(value))
             {

@@ -9,6 +9,8 @@ namespace Microsoft.SCIM
     using System.Net.Http;
     using System.Threading.Tasks;
     using System.Web.Http;
+
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.WebApiCompatShim;
 
@@ -36,18 +38,18 @@ namespace Microsoft.SCIM
             {
                 return;
             }
-
+            //Address ASP0019
             if (!this.Response.Headers.ContainsKey(ControllerTemplate.HeaderKeyContentType))
             {
-                this.Response.Headers.Add(ControllerTemplate.HeaderKeyContentType, ProtocolConstants.ContentType);
+                this.Response.Headers.Append(ControllerTemplate.HeaderKeyContentType, ProtocolConstants.ContentType);
             }
-
             Uri baseResourceIdentifier = this.ConvertRequest().GetBaseResourceIdentifier();
             Uri resourceIdentifier = resource.GetResourceIdentifier(baseResourceIdentifier);
             string resourceLocation = resourceIdentifier.AbsoluteUri;
+            //Address ASP0019
             if (!this.Response.Headers.ContainsKey(ControllerTemplate.HeaderKeyLocation))
             {
-                this.Response.Headers.Add(ControllerTemplate.HeaderKeyLocation, resourceLocation);
+                this.Response.Headers.Append(ControllerTemplate.HeaderKeyLocation, resourceLocation);
             }
         }
 
@@ -301,7 +303,7 @@ namespace Microsoft.SCIM
                 }
 
                 IResourceQuery resourceQuery = new ResourceQuery(request.RequestUri);
-                if (resourceQuery.Filters.Any())
+                if (resourceQuery.Filters.Count!=0)
                 {
                     if (resourceQuery.Filters.Count != 1)
                     {
